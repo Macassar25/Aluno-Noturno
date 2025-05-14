@@ -1,0 +1,25 @@
+<div class="container">
+  <h3>Chat em Tempo Real</h3>
+  <ul id="messages" class="list-group mb-3"></ul>
+  <input id="msgInput" class="form-control" placeholder="Digite sua mensagem" />
+</div>
+
+<script>
+  const socket = new WebSocket('ws://localhost:3000');
+  const messages = document.getElementById('messages');
+  const input = document.getElementById('msgInput');
+
+  socket.onmessage = (event) => {
+    const item = document.createElement('li');
+    item.textContent = event.data;
+    item.className = 'list-group-item';
+    messages.appendChild(item);
+  };
+
+  input.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter' && input.value) {
+      socket.send(input.value);
+      input.value = '';
+    }
+  });
+</script>
